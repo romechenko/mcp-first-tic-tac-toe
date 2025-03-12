@@ -72,10 +72,7 @@ const server = new McpServer({
 // Tool to view the current board state
 server.tool(
   "view-board",
-  "View the current state of the tic-tac-toe board. NOTE: Always pass at least an empty object {} as parameter.",
-  // Empty schema that will accept any params, including both undefined and empty objects
-  // NOTE: MCP clients MUST pass at least an empty object {} when invoking this tool
-  {},
+  "View the current state of the tic-tac-toe board.",
   async (params) => {
     logger.info("view-board tool called", { params });
     try {
@@ -186,12 +183,9 @@ server.tool(
 // Tool to reset the game
 server.tool(
   "reset-game",
-  "Reset the tic-tac-toe game to start a new game. NOTE: Always pass at least an empty object {} as parameter.",
-  // Empty schema that will accept any params, including both undefined and empty objects
-  // NOTE: MCP clients MUST pass at least an empty object {} when invoking this tool
-  {},
-  async (params) => {
-    logger.info("reset-game tool called", { params });
+  "Reset the tic-tac-toe game to start a new game.",
+  async () => {
+    logger.info("reset-game tool called");
     try {
       game.reset();
       
@@ -213,29 +207,15 @@ server.tool(
 // Tool to get game status
 server.tool(
   "game-status",
-  "Get the current status of the tic-tac-toe game. NOTE: Always pass at least an empty object {} as parameter.",
-  // Empty schema that will accept any params, including both undefined and empty objects
-  // NOTE: MCP clients MUST pass at least an empty object {} when invoking this tool
-  {},
-  async (params) => {
-    logger.info("game-status tool called", { params });
+  "Get the current status of the tic-tac-toe game.",
+  async () => {
+    logger.info("game-status tool called");
     try {
-      const state = game.getState();
-      
-      let statusMessage = "";
-      if (state.status === 'in_progress') {
-        statusMessage = `Game in progress. Current player: ${state.currentPlayer}`;
-      } else if (state.status === 'won') {
-        statusMessage = `Game over! ${state.winner} has won!`;
-      } else if (state.status === 'draw') {
-        statusMessage = "Game over! It's a draw!";
-      }
-
       return {
         content: [
           {
             type: "text",
-            text: statusMessage,
+            text: `Game Status: ${game.getState().status}`,
           },
         ],
       };
