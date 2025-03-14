@@ -150,9 +150,9 @@ export class TicTacToeGame {
       for (let j = 0; j < 3; j++) {
         result += ` ${this.board[i][j] || ' '} |`;
       }
-      result += '\\n';
+      result += '\n';
       if (i < 2) {
-        result += '|---|---|---|\\n';
+        result += '|---|---|---|\n';
       }
     }
     

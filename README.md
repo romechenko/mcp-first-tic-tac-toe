@@ -1,12 +1,15 @@
 # Tic-Tac-Toe MCP Server
 
-A simple Tic-Tac-Toe game implemented as a Model Context Protocol (MCP) server.
+A simple Tic-Tac-Toe game implemented as a Model Context Protocol (MCP) server with real-time updates.
 
 ## Features
 
 - Play Tic-Tac-Toe through MCP tools
+- Real-time game state updates using Server-Sent Events (SSE)
+- Intelligent logging system that highlights meaningful state changes
 - In-memory logging system for debugging
 - Full game state management
+- Robust SSE connection handling with error recovery
 
 ## Available Tools
 
@@ -17,6 +20,16 @@ The server provides the following tools:
 - `reset-game`: Reset the tic-tac-toe game to start a new game
 - `game-status`: Get the current status of the tic-tac-toe game
 - `get-logs`: Retrieve server logs for debugging
+
+## Real-Time Updates
+
+The game server uses Server-Sent Events (SSE) to provide real-time updates:
+
+- Both players see moves instantly without page refreshes
+- The MCP server maintains a persistent SSE connection to the game server
+- Automatic reconnection if the connection is interrupted
+- Intelligent logging that only shows meaningful game state changes
+- Minimal log noise from normal SSE heartbeat reconnections
 
 ## Important Notes for Tool Consumers
 
@@ -90,3 +103,9 @@ npm run start
 ```
 
 The server will run on stdio and connect to your MCP client.
+
+### Game Server
+
+The game server runs on port 3001 and provides:
+- HTTP API endpoints for game interactions
+- Server-Sent Events (SSE) endpoint at `/api/mcp-updates` for real-time updates

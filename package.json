@@ -9,7 +9,11 @@
   },
   "scripts": {
     "build": "node ./node_modules/typescript/bin/tsc && chmod 755 build/index.js",
+    "build:mcp": "node ./node_modules/typescript/bin/tsc && chmod 755 build/mcpServer.js",
     "start": "node build/index.js",
+    "start:mcp": "node build/mcpServer.js",
+    "dev": "npm run build && npm run start",
+    "dev:mcp": "npm run build:mcp && npm run start:mcp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,6 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
+    "axios": "^1.8.3",
+    "eventsource": "^3.0.5",
     "zod": "^3.24.2"
   },
   "devDependencies": {
