@@ -43,7 +43,7 @@ export class TicTacToeGame {
   }
 
   // Make a move on the board
-  public makeMove(position: Position): boolean {
+  public makeMove(position: Position, player: Player): boolean {
     const { row, col } = position;
 
     // Check if the game is over
@@ -62,7 +62,7 @@ export class TicTacToeGame {
     }
 
     // Make the move
-    this.board[row][col] = this.currentPlayer;
+    this.board[row][col] = player;
 
     // Check for win or draw
     this.checkGameStatus();

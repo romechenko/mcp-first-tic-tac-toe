@@ -4,6 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { TicTacToeGame } from "./game.js";
+import express, { Request, Response } from 'express';
 
 // Create an in-memory log store
 type LogEntry = {
@@ -135,7 +136,7 @@ server.tool(
       }
       
       // Try to make the move
-      const success = game.makeMove({ row, col });
+      const success = game.makeMove({ row, col }, player);
       
       if (!success) {
         logger.warn("Invalid move attempted", { row, col, player });
@@ -259,6 +260,37 @@ server.tool(
   }
 );
 
+const app = express();
+app.use(express.json());
+
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
+// Endpoint to get game status
+app.get('/api/game-status', (req: Request, res: Response) => {
+    const state = game.getState();
+    res.json({
+        status: state.status,
+        board: state.board,
+        currentPlayer: state.currentPlayer,
+        winner: state.winner
+    });
+});
+
+// Endpoint to make a move
+app.post('/api/make-move', (req: Request, res: Response) => {
+    const { row, col, player } = req.body;
+    const position = { row: parseInt(row), col: parseInt(col) };
+    const success = game.makeMove(position, player); // Pass player separately
+    res.json({ success });
+});
+
+// Endpoint to reset the game
+app.post('/api/reset-game', (req: Request, res: Response) => {
+    game.reset();
+    res.json({ message: 'Game has been reset!' });
+});
+
 // Main function to start the server
 async function main() {
   // Create a stdio transport for the server
@@ -274,6 +306,11 @@ async function main() {
     logger.error("Failed to connect server to transport", { error });
     throw error;
   }
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}. Open http://localhost:${PORT} to view the game.`);
+  });
 }
 
 // Start the server

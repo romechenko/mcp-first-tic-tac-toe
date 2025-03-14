@@ -78,7 +78,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# Removed public from .gitignore to allow access
 
 # vuepress build output
 .vuepress/dist
